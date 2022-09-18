@@ -1,0 +1,6 @@
+fragment FileVersionItem on FileNode {
+  ...FileNodeInfo
+  ... on FileVersion {
+    mimeType
+  }
+}

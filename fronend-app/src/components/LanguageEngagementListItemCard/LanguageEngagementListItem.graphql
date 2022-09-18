@@ -1,0 +1,43 @@
+fragment LanguageEngagementListItem on LanguageEngagement {
+  id
+  status
+  language {
+    value {
+      name {
+        value
+      }
+      displayName {
+        value
+      }
+      population {
+        value
+      }
+      registryOfDialectsCode {
+        value
+      }
+      ethnologue {
+        code {
+          canRead
+          canEdit
+          value
+        }
+      }
+      avatarLetters
+    }
+  }
+  products {
+    total
+    items {
+      id
+    }
+  }
+  endDate {
+    value
+  }
+  initialEndDate {
+    value
+  }
+  completeDate {
+    value
+  }
+}

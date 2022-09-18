@@ -1,0 +1,20 @@
+fragment LanguageListItem on Language {
+  id
+  name {
+    value
+  }
+  displayName {
+    value
+  }
+  ethnologue {
+    code {
+      value
+    }
+  }
+  registryOfDialectsCode {
+    value
+  }
+  population {
+    value
+  }
+}

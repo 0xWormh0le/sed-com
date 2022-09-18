@@ -1,0 +1,62 @@
+query ProjectOverview($input: ID!) {
+  project(id: $input) {
+    __typename
+    id
+    deptId {
+      canRead
+      canEdit
+      value
+    }
+    name {
+      canRead
+      canEdit
+      value
+    }
+    location {
+      canRead
+      canEdit
+      value {
+        ...DisplayLocation
+      }
+    }
+    mouStart {
+      canRead
+      canEdit
+      value
+    }
+    mouEnd {
+      canRead
+      canEdit
+      value
+    }
+    status
+    modifiedAt
+    budget {
+      canRead
+      value {
+        ...BudgetOverview
+      }
+    }
+    team {
+      ...ProjectMemberList
+    }
+    partnerships {
+      ...PartnershipSummary
+    }
+    engagements {
+      canRead
+      canCreate
+      total
+      items {
+        ... on LanguageEngagement {
+          __typename
+          ...LanguageEngagementListItem
+        }
+        ... on InternshipEngagement {
+          __typename
+          ...InternshipEngagementListItem
+        }
+      }
+    }
+  }
+}

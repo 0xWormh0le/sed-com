@@ -1,0 +1,6 @@
+fragment ProjectMemberList on SecuredProjectMemberList {
+  total
+  items {
+    ...ProjectMemberItem
+  }
+}

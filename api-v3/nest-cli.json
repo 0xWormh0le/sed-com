@@ -1,0 +1,7 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src/components",
+  "generateOptions": {
+    "spec": false
+  }
+}

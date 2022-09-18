@@ -1,0 +1,32 @@
+query User($userId: ID!) {
+  user(id: $userId) {
+    ...userDetails
+    ...UserForm
+  }
+}
+
+fragment userDetails on User {
+  id
+  email {
+    ...ss
+  }
+  fullName
+  bio {
+    ...ss
+  }
+  phone {
+    ...ss
+  }
+  timezone {
+    value {
+      name
+      countries {
+        code
+        name
+      }
+    }
+    canRead
+    canEdit
+  }
+  createdAt
+}

@@ -1,0 +1,78 @@
+schema: ${REACT_APP_API_BASE_URL}/graphql
+documents:
+  - ./src/**/*.graphql
+overwrite: true
+config:
+  # Use `import type` which should be default for TS 3.8+
+  useTypeImports: true
+  # Immutability is great, but Apollo also enforces this at runtime (at least in dev)
+  # so this ensures that invalid code is caught before runtime.
+  immutableTypes: true
+
+generates:
+  # Generate schema file so IDEs can autocomplete graphql documents
+  ./schema.graphql:
+    plugins:
+      - schema-ast
+
+  # Generate fragment matcher for Apollo's caching
+  ./src/api/fragmentMatcher.generated.ts:
+    plugins:
+      - fragment-matcher
+      - add:
+          placement: append
+          content: export const possibleTypes = result.possibleTypes;
+    config:
+      apolloClientVersion: 3
+
+  # Generate type policies automatically specific to our API
+  ./src/api/typePolicies/typePolicies.generated.ts:
+    plugins:
+      - ./src/api/typePolicies/typePolicies.codegen
+
+  # Generate TypeScript version of graphql schema
+  ./src/api/schema.generated.ts:
+    plugins:
+      - typescript
+      - add:
+          placement: prepend
+          content: |
+            import { DateTime } from 'luxon';
+            import { CalendarDate } from '../util';
+    config:
+      scalars:
+        Date: CalendarDate
+        DateTime: DateTime
+      skipTypename: false
+      enumsAsTypes: true
+
+  # Generate an object housing all of our operations
+  # This allows operations to be cross-referenced (i.e. `refetchQueries`) without needing to rely on magic strings
+  ./src/api/operations.generated.ts:
+    plugins:
+      - named-operations-object
+    config:
+      identifierName: GQLOperations
+
+  # Generate types & react hooks for our operations
+  ./src/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .generated.ts
+      baseTypesPath: api/schema.generated.ts
+    plugins:
+      - typescript-operations
+      # Look into this which would allow typed documents
+      # This means that we wouldn't need custom hooks generated for every operation
+      # https://graphql-code-generator.com/docs/plugins/typed-document-node
+      # - typed-document-node
+      - typescript-react-apollo
+    config:
+      gqlImport: graphql-tag
+      skipTypename: false
+      enumsAsTypes: true
+      # Instead of Pick-ing from generated schema, redefine shape inline
+      # Skipping for now, since schema has docs which IDE can provide when Pick is used.
+      preResolveTypes: false
+      # Removes useless __typename from query/mutation root types which are always "Query" or "Mutation"
+      skipTypeNameForRoot: true

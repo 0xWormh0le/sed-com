@@ -1,0 +1,16 @@
+# Versioned but ignore
+.*
+!.babelrc
+!.eslintignore
+
+# Yarn / NPM
+!.yarnrc.yml
+!.yarn/releases
+!.yarn/plugins
+node_modules
+
+# Local
+build
+coverage
+schema.graphql
+*.generated.ts
